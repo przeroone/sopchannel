@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Matches</title>
+    <style type="text/css">
+      body {
+        padding: 10px;
+        background: #DEDEDE;
+        color: #808080;
+      }
+      .team-logo {
+        height: 50px;
+        margin-left: 10px;
+      }
+    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <script src="http://fb.me/react-0.12.0.js"></script>
+    <script src="http://fb.me/JSXTransformer-0.12.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div id="container"></div>
+    <script type="text/jsx">
+
+      var LinkList = React.createClass({
+        render: function() {
+          return (
+            <div className="link">
+              <span className="label label-primary">{this.props.bit_rate}</span>
+              &nbsp;
+              <span className="label label-primary">{this.props.ratio}</span>
+              &nbsp;
+              <a href={this.props.sopcast_link}>Link</a>
+            </div>
+          );
+        }
+      });
+
+      var Match = React.createClass({
+        render: function() {
+          return (
+            <div className="match">
+              <div className="pull-right">
+                <img src={this.props.image_1} className="team-logo"/>
+                <img src={this.props.image_2} className="team-logo"/>
+              </div>
+              <h3>{this.props.title}</h3>
+              <h4>{this.props.time}</h4>
+              <div className="link_list">
+                {this.props.links.map(function(link) {
+                  return <LinkList bit_rate={link.bit_rate} ratio={link.ratio} sopcast_link={link.sopcast_link}/>
+                })}
+              </div>
+            </div>
+          );
+        }
+      });
+
+      var MatchList = React.createClass({
+        getInitialState: function() {
+          return {data: []};
+        },
+        componentDidMount: function() {
+          $.ajax({
+            url: this.props.url,
+            dataType: 'json',
+            success: function(data) {
+              this.setState({data: data});
+            }.bind(this),
+            error: function(xhr, status, err) {
+              console.error(this.props.url, status, err.toString());
+            }.bind(this)
+          });
+        },
+        render: function() {
+          return (
+            <div className="container-fluid">
+              <div class="row">
+                <div className="col-md-8 col-md-offset-2">
+                  <ul className="list-group">
+                    {this.state.data.map(function(match) {
+                      return <li href="#" className="list-group-item"><Match title={match.title} time={match.time} links={match.links} image_1={match.image_1} image_2={match.image_2}/></li>
+                    })}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          );
+        }
+      });
+
+      React.render(
+        <MatchList url="https://api.myjson.com/bins/1ucaz" />,
+        document.getElementById('container')
+      );
+    </script>
+  </body>
+</html>
