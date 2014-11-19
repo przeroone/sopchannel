@@ -26,11 +26,16 @@
 
       var LinkList = React.createClass({
         render: function() {
+          var divStyle = {
+            display:    'block',
+            color:      'blue',
+            fontWeight: 'bold'
+          }
           return (
-            <div className="link">
-              <span className="label label-primary">{this.props.bit_rate}</span>
+            <div className="link" style={divStyle}>
+              {this.props.bit_rate}
               &nbsp;
-              <span className="label label-primary">{this.props.ratio}</span>
+              {this.props.ratio}
               &nbsp;
               <a href={this.props.sopcast_link}>Link</a>
             </div>
