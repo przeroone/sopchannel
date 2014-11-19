@@ -1,6 +1,9 @@
 require 'rubygems'
 require 'mechanize'
 
+puts "\n"
+puts "[#{Time.now}] Process started..."
+
 link = 'http://livefootball.ws'
 
 entities = []
@@ -33,4 +36,9 @@ matches.each do |match|
   entities << {title: title, time: time, image_1: images[0], image_2: images[1], links: links}
 end
 
+puts "[#{Time.now}] Data collection done..."
+
 File.open('matches.json', 'w') { |file| file.write(entities.to_json) }
+
+puts "[#{Time.now}] Writing to file done..."
+puts "[#{Time.now}] Process ended..."
